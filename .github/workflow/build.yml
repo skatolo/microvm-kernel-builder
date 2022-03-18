@@ -22,3 +22,4 @@ jobs:
           cd linux.git
           time make vmlinux -j$(nproc)
           du -h ./vmlinux
+
