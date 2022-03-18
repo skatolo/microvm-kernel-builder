@@ -1,0 +1,24 @@
+name: build
+
+on: push
+jobs:
+  my-job:
+    runs-on: self-hosted
+    steps:
+      - name: get build toolchain
+        run: sudo apt-get install git build-essential kernel-package fakeroot libncurses5-dev libssl-dev ccache bison flex libelf-dev dwarves
+      - name: clone linux
+        run: |
+          time git clone https://github.com/torvalds/linux.git linux.git --depth=1 --branch v5.10
+          cd linux.git
+          curl -o .config -s -f https://raw.githubusercontent.com/firecracker-microvm/firecracker/main/resources/guest_configs/microvm-kernel-x86_64-5.10.config
+          echo "# CONFIG_KASAN is not set" >> .config
+      - name: make config
+        run: |
+          cd linux.git 
+          make oldconfig
+      - name: Make vmlinux
+        run: |
+          cd linux.git
+          time make vmlinux -j$(nproc)
+          du -h ./vmlinux
