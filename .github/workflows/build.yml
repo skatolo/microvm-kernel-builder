@@ -5,6 +5,10 @@ jobs:
   my-job:
     runs-on: self-hosted
     steps:
+      - name: free RAM
+        run: free -h
+      - name: List CPUs
+        run: nproc
       - name: get build toolchain
         run: |
           sudo apt update -qy
