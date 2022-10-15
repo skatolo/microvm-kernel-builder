@@ -1,9 +1,9 @@
-name: build
+name: microvm-kernel
 
 on: push
 jobs:
-  my-job:
-    runs-on: actuated
+  microvm-kernel:
+    runs-on: ubuntu-latest
     steps:
       - name: free RAM
         run: free -h
