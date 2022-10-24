@@ -4,6 +4,8 @@ on: push
 jobs:
   microvm-kernel:
     runs-on: ubuntu-latest
+    env:
+      kernel: v5.10
     steps:
       - name: free RAM
         run: free -h
@@ -26,17 +28,30 @@ jobs:
             dwarves
       - name: clone linux
         run: |
-          time git clone https://github.com/torvalds/linux.git linux.git --depth=1 --branch v5.10
+          time git clone https://github.com/torvalds/linux.git linux.git --depth=1 --branch ${{ env.kernel }}
           cd linux.git
           curl -o .config -s -f https://raw.githubusercontent.com/firecracker-microvm/firecracker/main/resources/guest_configs/microvm-kernel-x86_64-5.10.config
           echo "# CONFIG_KASAN is not set" >> .config
-      - name: make config
+      - name: cache config
+        id: cache-config
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-kernel-config
+        with:
+          path: linux.git/.config
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.kernel }}-${{ hashFiles('linux.git/.config') }}
+
+      - if: ${{ steps.cache-config.outputs.cache-hit != 'true' }}
+        name: make config
         run: |
-          cd linux.git 
-          make oldconfig
-      - name: Make vmlinux
+          # cd linux.git 
+          # make oldconfig
+          echo "making config"
+      - if: ${{ steps.cache-config.outputs.cache-hit != 'true' }}
+        name: Make vmlinux
         run: |
-          cd linux.git
-          time make vmlinux -j$(nproc)
-          du -h ./vmlinux
+          # cd linux.git
+          # time make vmlinux -j$(nproc)
+          # du -h ./vmlinux
+          echo "building-kernel"
 
