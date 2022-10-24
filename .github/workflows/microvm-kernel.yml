@@ -32,6 +32,7 @@ jobs:
           cd linux.git
           curl -o .config -s -f https://raw.githubusercontent.com/firecracker-microvm/firecracker/main/resources/guest_configs/microvm-kernel-x86_64-5.10.config
           echo "# CONFIG_KASAN is not set" >> .config
+          echo 'CONFIG_DEFAULT_HOSTNAME="actuated"' >> .config
       - name: cache config
         id: cache-config
         uses: actions/cache@v3
