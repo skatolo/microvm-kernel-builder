@@ -29,7 +29,7 @@ jobs:
         run: |
           time git clone https://github.com/torvalds/linux.git linux.git --depth=1 --branch v${{ env.kernel-version }}
           cd linux.git
-          curl -o .config -s -f https://raw.githubusercontent.com/firecracker-microvm/firecracker/main/resources/guest_configs/microvm-kernel-x86_64-5.10.config
+          curl -o .config -s -f https://raw.githubusercontent.com/firecracker-microvm/firecracker/refs/heads/main/resources/guest_configs/microvm-kernel-ci-x86_64-5.10.config
           echo "# CONFIG_KASAN is not set" >> .config
       - name: Vache config
         id: cache-config
