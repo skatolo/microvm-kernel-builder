@@ -17,7 +17,6 @@ jobs:
           sudo apt-get install -qy \
             git \
             build-essential \
-            kernel-package \
             fakeroot \
             libncurses5-dev \
             libssl-dev \
