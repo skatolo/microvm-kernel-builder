@@ -18,8 +18,9 @@ jobs:
             git \
             build-essential \
             fakeroot \
-            libncurses5-dev \
+            libncurses-dev \
             libssl-dev \
+            libssl1.1
             ccache \
             bison \
             flex \
